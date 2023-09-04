@@ -8,6 +8,9 @@ import java.util.Scanner;
 public class Main {
 
     private static Scanner lector = new Scanner(System.in);
+    private static List<Arbre> arbres = new ArrayList<>();
+    private static List<Flor> flors = new ArrayList<>();
+    private static List<Decoracio> decoracions = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -28,14 +31,12 @@ public class Main {
         */
 
         String opcio = "0";
-        List<Floristeria> floristerias = new ArrayList<>();
-        List<Arbre> arbres = new ArrayList<>();
-        List<Flor> flors = new ArrayList<>();
-        List<Decoracio> decoracions = new ArrayList<>();
+        Floristeria floristeria = null;
         String nomFloristeria = "";
         String nomArbre = "";
         String nomFlor = "";
         String colorFlor = "";
+        int opcioABorrar;
         Arbre arbre;
         Flor flor;
         Decoracio decoracio;
@@ -66,100 +67,178 @@ public class Main {
             opcio = lector.nextLine();
 
             switch (opcio) {
+
+                // Crear floristeria
                 case "1":
 
-                    System.out.println("Crear Floristeria:");
-                    System.out.println("Introdueix el nom de la floristeria");
-                    nomFloristeria = lector.nextLine();
+                    if (floristeria == null) {
 
-                    System.out.println("Introdueix els arbres. Mínim ha de haber-hi 1 arbre, escriu 'stop' per parar de afegir arbres");
-                    while (true) {
+                        floristeria = crearFloristeria();
+                        System.out.println("Floristeria creada!");
 
-                        System.out.println("Nom arbre número " + (arbres.size() + 1) + ":");
+                    } else {
 
-                        nomArbre = lector.nextLine();
-
-                        if (nomArbre.equals("stop") && arbres.size() > 0) {
-                            break;
-                        } else {
-                            System.out.println("Ha de haber-hi mínim 1 arbre!");
-                        }
-
-                        arbres.add(crearArbre(arbres, nomArbre));
-
-                        System.out.println("Arbre afegit!");
+                        System.out.println("Floristeria ja creada!");
 
                     }
-
-                    System.out.println("Introdueix les flors. Mínim ha de haber-hi 1 flor, escriu 'stop' per parar de afegir flors");
-                    while (!nomFlor.equals("stop") && flors.size() > 0) {
-
-                        flors.add(crearFlor(flors));
-
-                        System.out.println("Flor afegida!");
-
-                    }
-
-                    System.out.println("Introdueix les decoracions. Mínim ha de haber-hi 1 decoració, escriu 'stop' per parar de afegir decoracions");
-                    while (!tipusMaterial.toString().equals("stop") && decoracions.size() > 0) {
-
-                        decoracions.add(crearDecoracio(decoracions));
-
-                        System.out.println("Arbre afegit!");
-
-                    }
-
-                    // String nom, List<Arbre> arbres, List<Flor> flors, List<Decoracio> decoracio
-                    floristerias.add(new Floristeria(nomFloristeria, arbres, flors, decoracions));
-
-                    System.out.println("Floristeria creada!");
 
                     break;
 
+                // Crear arbre
                 case "2":
 
-                    System.out.println("Crear arbre:");
-
-                    crearArbre(arbres, nomArbre);
+                    if (floristeria == null) {
+                        floristeria = crearFloristeria();
+                    } else {
+                        floristeria.addArbre(crearArbre());
+                    }
 
                     System.out.println("Arbre creat!");
 
                     break;
 
+                // Crear flor
                 case "3":
 
-                    // Crear flor
-
-                    System.out.println("Crear flor:");
-
-                    crearFlor(flors);
+                    if (floristeria == null) {
+                        floristeria = crearFloristeria();
+                    } else {
+                        crearFlor();
+                    }
 
                     System.out.println("Flor creada!");
 
                     break;
 
+                // Crear decoració
                 case "4":
 
-                    // Crear decoració
-
-                    System.out.println("Crear decoració:");
-
-                    crearDecoracio(decoracions);
+                    if (floristeria == null) {
+                        floristeria = crearFloristeria();
+                    } else {
+                        crearDecoracio();
+                    }
 
                     System.out.println("Decoració creada!");
 
                     break;
 
+                // Imprimir per pantalla el stock de la floristeria
                 case "5":
 
+                    if (floristeria == null) {
+                        floristeria = crearFloristeria();
+                    }
+
+                    imprimirStock();
+
                     break;
+
+                // Retirar arbre
                 case "6":
 
-                    break;
-                case "7":
+                    if (floristeria == null || arbres.size() == 0) {
+                        System.out.println("No hi ha cap arbre que retirar!");
+                    } else {
+
+                        System.out.println("Introdueix el index del arbre que vols eliminar: ");
+                        for (int i = 0; i < arbres.size(); i++) {
+                            System.out.println(i + "- " + arbres.get(i));
+                        }
+
+                        while (true) {
+
+                            if (!lector.hasNextInt()) {
+                                System.out.println("Introdueix un valor vàlid!");
+                                lector.next();
+                            } else {
+                                opcioABorrar = lector.nextInt();
+                                if (opcioABorrar >= arbres.size() || opcioABorrar < 0) {
+                                    System.out.println("Introdueix un valor vàlid!");
+                                    lector.next();
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+
+                        arbres.remove(opcioABorrar);
+
+                        System.out.println("Arbre amb index: " + opcioABorrar + " borrat!");
+
+                    }
 
                     break;
+
+                // Retirar flor
+                case "7":
+
+                    if (floristeria == null || flors.size() == 0) {
+                        System.out.println("No hi ha cap flor que retirar!");
+                    } else {
+
+                        System.out.println("Introdueix el index de la flor que vols eliminar: ");
+                        for (int i = 0; i < flors.size(); i++) {
+                            System.out.println(i + "- " + flors.get(i));
+                        }
+
+                        while (true) {
+
+                            if (!lector.hasNextInt()) {
+                                System.out.println("Introdueix un valor vàlid!");
+                                lector.next();
+                            } else {
+                                opcioABorrar = lector.nextInt();
+                                if (opcioABorrar >= flors.size() || opcioABorrar < 0) {
+                                    System.out.println("Introdueix un valor vàlid!");
+                                    lector.next();
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+
+                        flors.remove(opcioABorrar);
+
+                        System.out.println("Flor amb index: " + opcioABorrar + " borrat!");
+
+                    }
+
+                    break;
+
+                // Retirar decoració
                 case "8":
+
+                    if (floristeria == null || decoracions.size() == 0) {
+                        System.out.println("No hi ha cap decoració que retirar!");
+                    } else {
+
+                        System.out.println("Introdueix el index de la decoració que vols eliminar: ");
+                        for (int i = 0; i < decoracions.size(); i++) {
+                            System.out.println(i + "- " + decoracions.get(i));
+                        }
+
+                        while (true) {
+
+                            if (!lector.hasNextInt()) {
+                                System.out.println("Introdueix un valor vàlid!");
+                                lector.next();
+                            } else {
+                                opcioABorrar = lector.nextInt();
+                                if (opcioABorrar >= decoracions.size() || opcioABorrar < 0) {
+                                    System.out.println("Introdueix un valor vàlid!");
+                                    lector.next();
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+
+                        decoracions.remove(opcioABorrar);
+
+                        System.out.println("Decoració amb index: " + opcioABorrar + " borrat!");
+
+                    }
 
                     break;
                 case "9":
@@ -187,11 +266,58 @@ public class Main {
 
     }
 
-    public static Arbre crearArbre(List<Arbre> arbres, String nomArbre) {
+    private static void imprimirStock() {
+
+        System.out.print("STOCK FLORISTERIA:" +
+                "\n\tARBRES:\n");
+
+        arbres.forEach(System.out::println);
+
+        System.out.println("\tFLORS:");
+
+        flors.forEach(System.out::println);
+
+        System.out.println("\tDECORACIÓ:");
+
+        decoracions.forEach(System.out::println);
+
+    }
+
+    private static Floristeria crearFloristeria() {
+
+        String nomFloristeria = "";
+
+        System.out.println("Crear Floristeria:");
+        System.out.println("Introdueix el nom de la floristeria");
+        nomFloristeria = lector.nextLine();
+
+        arbres.add(crearArbre());
+
+        System.out.println("Arbre afegit!");
+
+        flors.add(crearFlor());
+
+        System.out.println("Flor afegida!");
+
+        decoracions.add(crearDecoracio());
+
+        System.out.println("Decoració afegida!");
+        // Creamos una floristeria con al menos 1 de stock mínimo de cada uno de los productos
+        return new Floristeria(nomFloristeria, arbres, flors, decoracions);
+
+    }
+
+    public static Arbre crearArbre() {
 
         Scanner lector = new Scanner(System.in);
+        String nomArbre = "";
         double alcadaArbre;
         double preuArbre;
+
+        System.out.println("Crear arbre:");
+        System.out.println("Nom arbre:");
+
+        nomArbre = lector.nextLine();
 
         System.out.println("Alçada:");
 
@@ -225,29 +351,17 @@ public class Main {
 
     }
 
-    public static Flor crearFlor(List<Flor> flors) {
+    public static Flor crearFlor() {
 
         Scanner lector = new Scanner(System.in);
         String nomFlor;
         String color;
         double preuFlor;
 
-        System.out.println("Nom flor número " + (flors.size() + 1) + ":");
+        System.out.println("Crear flor:");
+        System.out.println("Nom flor:");
 
-        while (true) {
-
-            nomFlor = lector.nextLine();
-
-            // Comprobamos que el usuario introduzca al menos 1 nombre válido de árbol
-            if (nomFlor.equals("stop") && flors.size() > 0) {
-                return null;
-            } else if (nomFlor.equals("stop")) {
-                System.out.println("Introdueix un nom vàlid!");
-            } else {
-                break;
-            }
-
-        }
+        nomFlor = lector.nextLine();
 
         System.out.println("Color:");
 
@@ -271,27 +385,29 @@ public class Main {
 
     }
 
-    public static Decoracio crearDecoracio(List<Decoracio> decoracions) {
+    public static Decoracio crearDecoracio() {
 
         Scanner lector = new Scanner(System.in);
         TipusMaterial tipusMaterial;
         double preuDecoracio;
+        String opcio = "";
 
-        System.out.println("Nom decoració número " + (decoracions.size() + 1) + ":");
-
+        System.out.println("Crear decoració:");
         System.out.println("Tipus material (1 - fusta, 2 - plàstic):");
 
+        // Bucle para que el usuario seleccione la opción correcta
         while (true) {
 
-            if (lector.nextLine().equals("1")) {
+            opcio = lector.nextLine();
+
+            if (opcio.equals("1")) {
                 tipusMaterial = TipusMaterial.FUSTA;
                 break;
-            } else if (lector.nextLine().equals("2")) {
+            } else if (opcio.equals("2")) {
                 tipusMaterial = TipusMaterial.PLASTIC;
                 break;
             } else {
                 System.err.println("Introdueix una opció correcta!");
-                lector.next();
             }
 
         }

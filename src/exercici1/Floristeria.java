@@ -62,6 +62,20 @@ public class Floristeria {
         return decoracio.size();
     }
 
+    // Los siguientes 3 métodos es para añadir nuevos productos a los arrays que tenemos
+
+    public void addArbre(Arbre arbre) {
+        this.arbres.add(arbre);
+    }
+
+    public void addFlor(Flor flor){
+        this.flors.add(flor);
+    }
+
+    public void addDecoracio(Decoracio decoracio) {
+        this.decoracio.add(decoracio);
+    }
+
     // Obtenemos el valor total de stock sumando todos los valores de todos los productos de la floristeria
     public double getValorTotalStock() {
 
@@ -89,7 +103,7 @@ public class Floristeria {
                 "nom='" + nom + '\'' +
                 ", arbres=" + arbres +
                 ", flors=" + flors +
-                ", decoracio=" + decoracio +
+                ", decoració=" + decoracio +
                 '}';
     }
 
