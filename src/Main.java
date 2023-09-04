@@ -73,9 +73,19 @@ public class Main {
                     nomFloristeria = lector.nextLine();
 
                     System.out.println("Introdueix els arbres. Mínim ha de haber-hi 1 arbre, escriu 'stop' per parar de afegir arbres");
-                    while (!nomArbre.equals("stop") && arbres.size() > 0) {
+                    while (true) {
 
-                        arbres.add(crearArbre(arbres));
+                        System.out.println("Nom arbre número " + (arbres.size() + 1) + ":");
+
+                        nomArbre = lector.nextLine();
+
+                        if (nomArbre.equals("stop") && arbres.size() > 0) {
+                            break;
+                        } else {
+                            System.out.println("Ha de haber-hi mínim 1 arbre!");
+                        }
+
+                        arbres.add(crearArbre(arbres, nomArbre));
 
                         System.out.println("Arbre afegit!");
 
@@ -110,7 +120,7 @@ public class Main {
 
                     System.out.println("Crear arbre:");
 
-                    crearArbre(arbres);
+                    crearArbre(arbres, nomArbre);
 
                     System.out.println("Arbre creat!");
 
@@ -177,29 +187,11 @@ public class Main {
 
     }
 
-    public static Arbre crearArbre(List<Arbre> arbres) {
+    public static Arbre crearArbre(List<Arbre> arbres, String nomArbre) {
 
         Scanner lector = new Scanner(System.in);
-        String nomArbre;
         double alcadaArbre;
         double preuArbre;
-
-        System.out.println("Nom arbre número " + (arbres.size() + 1) + ":");
-
-        while (true) {
-
-            nomArbre = lector.nextLine();
-
-            // Comprobamos que el usuario introduzca al menos 1 nombre válido de árbol
-            if (nomArbre.equals("stop") && arbres.size() > 0) {
-                return null;
-            } else if (nomArbre.equals("stop")) {
-                System.out.println("Introdueix un nom vàlid!");
-            } else {
-                break;
-            }
-
-        }
 
         System.out.println("Alçada:");
 
