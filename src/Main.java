@@ -2,6 +2,7 @@ import exercici1.*;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -103,7 +104,7 @@ public class Main {
                     if (floristeria == null) {
                         floristeria = crearFloristeria();
                     } else {
-                        crearFlor();
+                        floristeria.addFlor(crearFlor());
                     }
 
                     System.out.println("Flor creada!");
@@ -116,7 +117,7 @@ public class Main {
                     if (floristeria == null) {
                         floristeria = crearFloristeria();
                     } else {
-                        crearDecoracio();
+                        floristeria.addDecoracio(crearDecoracio());
                     }
 
                     System.out.println("Decoració creada!");
@@ -241,9 +242,14 @@ public class Main {
                     }
 
                     break;
+
+                    // Printar stock amb quantitats
                 case "9":
 
+                    printarStockAmbQuantitats();
+
                     break;
+
                 case "10":
 
                     break;
@@ -263,6 +269,62 @@ public class Main {
                     System.out.println("introdueix una opció correcte!");
             }
         }
+
+    }
+
+    // Método para printar por pantalla todos los stocks con sus cantidades
+    private static void printarStockAmbQuantitats() {
+
+        HashMap<String, Integer> nameAndCount = new HashMap<>();
+
+        System.out.print("STOCK FLORISTERIA AMB QUANTITATS:" +
+                "\n\tARBRES:\n");
+
+        for (Arbre arbre : arbres) {
+
+            Integer count = nameAndCount.get(arbre.getNom());
+
+            if (count == null) {
+                nameAndCount.put(arbre.getNom(), 1);
+            } else {
+                nameAndCount.put(arbre.getNom(), ++count);
+            }
+
+        }
+
+        System.out.println(nameAndCount);
+
+        nameAndCount = new HashMap<>();
+
+        for (Flor flor : flors) {
+
+            Integer count = nameAndCount.get(flor.getNom());
+
+            if (count == null) {
+                nameAndCount.put(flor.getNom(), 1);
+            } else {
+                nameAndCount.put(flor.getNom(), ++count);
+            }
+
+        }
+
+        System.out.println("\tFLORS:\n" + nameAndCount);
+
+        nameAndCount = new HashMap<>();
+
+        for (Decoracio decoracio : decoracions) {
+
+            Integer count = nameAndCount.get(decoracio.getTipusMaterial().name());
+
+            if (count == null) {
+                nameAndCount.put(decoracio.getTipusMaterial().name(), 1);
+            } else {
+                nameAndCount.put(decoracio.getTipusMaterial().name(), ++count);
+            }
+
+        }
+
+        System.out.println("\tDECORACIÓ:\n" + nameAndCount);
 
     }
 
