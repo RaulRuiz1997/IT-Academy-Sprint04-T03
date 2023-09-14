@@ -1,0 +1,17 @@
+Ticket nº 1
+Arbres:
+   Arbre{nom='pino', alcada=5.0, preu=350.0}
+Flors:
+Decoració:
+Total: 350.0€
+
+Ticket nº 2
+Arbres:
+   Arbre{nom='olivo', alcada=4.0, preu=560.0}
+   Arbre{nom='roble', alcada=10.0, preu=435.0}
+Flors:
+   Flor{nom='margarita', color='amarillo', preu=5.0}
+Decoració:
+   Decoracio{tipusMaterial=FUSTA, preu=250.0}
+Total: 690.0€
+

@@ -1,5 +1,8 @@
 import exercici1.*;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +17,10 @@ public class Main {
     private static List<Decoracio> decoracions = new ArrayList<>();
     private static List<Ticket> llistaDeCompres = new ArrayList<>();
     private static double dinersGuanyats = 0;
+    private static File floristeriaFile = new File("floristeria.txt");
+    private static int contadorTickets = 1;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         String opcio = "0";
         Floristeria floristeria = null;
@@ -298,18 +303,31 @@ public class Main {
 
     }
 
-    private static Ticket crearTicketDeCompra() {
+    private static Ticket crearTicketDeCompra() throws IOException {
 
         Scanner lector = new Scanner(System.in);
         String opcio = "";
         List<Arbre> arbresTicket = new ArrayList<>();
         List<Flor> florsTicket = new ArrayList<>();
         List<Decoracio> decoracionsTicket = new ArrayList<>();
+        double dinersTicket = 0;
+        FileWriter fw;
+
+        try {
+            fw = new FileWriter(floristeriaFile, true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Per a crear un ticket de compra tens que escollir el objectes imprimits per pantalla." +
                 "S'aniran imprimint per ordre y has d'escollir els objectes que vulguis\n");
 
         System.out.println("Introdueix aquí el número del objecte o escriu 'skip' per a pasar a la següent secció");
+
+        // Escribimos en el fichero los datos importantes
+        fw.write("Ticket nº " + contadorTickets);
+        contadorTickets++;
+        fw.write("\nArbres:");
 
         while (true) {
 
@@ -335,6 +353,10 @@ public class Main {
                     // Guardamos la ganancia para otro método
                     dinersGuanyats = dinersGuanyats + arbresTicket.get(arbresTicket.size() - 1).getPreu();
 
+                    dinersTicket = arbresTicket.get(arbresTicket.size() - 1).getPreu();
+
+                    fw.write("\n   " + arbresTicket.get(arbresTicket.size() - 1).toString());
+
                     System.out.println(arbresTicket.get(arbresTicket.size() - 1) + " - afegit al ticket");
 
                 } else {
@@ -344,6 +366,8 @@ public class Main {
             }
 
         }
+
+        fw.write("\nFlors:");
 
         while (true) {
 
@@ -369,6 +393,10 @@ public class Main {
                     // Guardamos la ganancia para otro método
                     dinersGuanyats = dinersGuanyats + florsTicket.get(florsTicket.size() - 1).getPreu();
 
+                    dinersTicket = dinersTicket + florsTicket.get(florsTicket.size() - 1).getPreu();
+
+                    fw.write("\n   " + florsTicket.get(florsTicket.size() - 1).toString());
+
                     System.out.println(florsTicket.get(florsTicket.size() - 1) + " - afegit al ticket");
 
                 } else {
@@ -378,6 +406,8 @@ public class Main {
             }
 
         }
+
+        fw.write("\nDecoració:");
 
         while (true) {
 
@@ -403,6 +433,10 @@ public class Main {
                     // Guardamos la ganancia para otro método
                     dinersGuanyats = dinersGuanyats + decoracionsTicket.get(decoracionsTicket.size() - 1).getPreu();
 
+                    dinersTicket = dinersTicket + decoracionsTicket.get(decoracionsTicket.size() - 1).getPreu();
+
+                    fw.write("\n   " + decoracionsTicket.get(decoracionsTicket.size() - 1).toString());
+
                     System.out.println(decoracionsTicket.get(decoracionsTicket.size() - 1) + " - afegit al ticket");
 
                 } else {
@@ -412,6 +446,10 @@ public class Main {
             }
 
         }
+
+        fw.write("\nTotal: " + dinersTicket + "€\n\n");
+
+        fw.close();
 
         return new Ticket(arbresTicket, florsTicket, decoracionsTicket);
 
