@@ -12,44 +12,18 @@ public class Main {
     private static List<Arbre> arbres = new ArrayList<>();
     private static List<Flor> flors = new ArrayList<>();
     private static List<Decoracio> decoracions = new ArrayList<>();
+    private static List<Ticket> llistaDeCompres = new ArrayList<>();
+    private static double dinersGuanyats = 0;
 
     public static void main(String[] args) {
 
-        /*
-        Crear Floristeria.
-        Afegir Arbre.
-        Afegir Flor.
-        Afegir Decoració.
-        Stock: Imprimeix per pantalla tots els arbres, flors i decoració que té la floristeria.
-        Retirar arbre.
-        Retirar flor.
-        Retirar decoració.
-        Printar per pantalla stock amb quantitats.
-        Printar per pantalla valor total de la floristeria.
-        Crear tickets de compra amb múltiples objectes.
-        Mostrar una llista de compres antigues.
-        Visualitzar el total de diners guanyats amb totes les vendes.
-        */
-
         String opcio = "0";
         Floristeria floristeria = null;
-        String nomFloristeria = "";
-        String nomArbre = "";
-        String nomFlor = "";
-        String colorFlor = "";
         int opcioABorrar;
-        Arbre arbre;
-        Flor flor;
-        Decoracio decoracio;
-        TipusMaterial tipusMaterial = TipusMaterial.FUSTA;
-        double alcadaArbre = 0;
-        double preuArbre = 0;
-        double preuFlor = 0;
-        double preuDecoracio = 0;
 
         while (!opcio.equals("14")) {
 
-            System.out.println("Introdueix una opció:\n" +
+            System.out.println("\nIntrodueix una opció:\n" +
                     "        1. Crear Floristeria.\n" +
                     "        2. Afegir Arbre.\n" +
                     "        3. Afegir Flor.\n" +
@@ -243,36 +217,203 @@ public class Main {
 
                     break;
 
-                    // Printar stock amb quantitats
+                // Printar stock amb quantitats
                 case "9":
 
                     printarStockAmbQuantitats();
 
                     break;
 
-                    // Printar per pantalla valor total de la floristeria
+                // Printar per pantalla valor total de la floristeria
                 case "10":
 
                     printarValorTotalFloristeria();
 
                     break;
 
+                // Crear tickets de compra amb múltiples objectes
                 case "11":
 
+                    llistaDeCompres.add(crearTicketDeCompra());
+
+                    System.out.println("Ticket de compra nº " + llistaDeCompres.size() + " creat!");
+
                     break;
+
+                // Mostrar una llista de compres antigues
                 case "12":
 
-                    break;
-                case "13":
+                    imprimirLlistaDeCompresAntigues();
 
                     break;
-                case "14":
-                    System.out.println("Sortint de la aplicació");
+
+                // Visualitzar el total de diners guanyats amb totes les vendes
+                case "13":
+
+                    dinersGuanyats();
+
                     break;
+
+                // Sortir
+                case "14":
+
+                    System.out.println("Sortint de la aplicació");
+
+                    break;
+
                 default:
                     System.out.println("introdueix una opció correcte!");
+
             }
+
         }
+
+    }
+
+    private static void dinersGuanyats() {
+
+        if (llistaDeCompres.size() > 0) {
+
+            System.out.println("Diners guanyats: " + dinersGuanyats);
+
+        } else {
+
+            System.out.println("Encara no hi ha agut ventes!");
+
+        }
+
+    }
+
+    private static void imprimirLlistaDeCompresAntigues() {
+
+        if (llistaDeCompres.size() > 0) {
+
+            System.out.println(llistaDeCompres);
+
+        } else {
+
+            System.out.println("Encara no hi ha agut ventes!");
+
+        }
+
+    }
+
+    private static Ticket crearTicketDeCompra() {
+
+        Scanner lector = new Scanner(System.in);
+        String opcio = "";
+        List<Arbre> arbresTicket = new ArrayList<>();
+        List<Flor> florsTicket = new ArrayList<>();
+        List<Decoracio> decoracionsTicket = new ArrayList<>();
+
+        System.out.println("Per a crear un ticket de compra tens que escollir el objectes imprimits per pantalla." +
+                "S'aniran imprimint per ordre y has d'escollir els objectes que vulguis\n");
+
+        System.out.println("Introdueix aquí el número del objecte o escriu 'skip' per a pasar a la següent secció");
+
+        while (true) {
+
+            System.out.println("ARBRES:");
+
+            for (int i = 0; i < arbres.size(); i++) {
+                System.out.println(i + " - " + arbres.get(i));
+            }
+
+            opcio = lector.nextLine();
+
+            if (opcio.equals("skip")) {
+
+                break;
+
+            } else {
+
+                if (Integer.parseInt(opcio) >= 0 && Integer.parseInt(opcio) < arbres.size()) {
+
+                    // Añadimos el arbol que queremos poner en el ticket al arraylist
+                    arbresTicket.add(arbres.remove(Integer.parseInt(opcio)));
+
+                    // Guardamos la ganancia para otro método
+                    dinersGuanyats = dinersGuanyats + arbresTicket.get(arbresTicket.size() - 1).getPreu();
+
+                    System.out.println(arbresTicket.get(arbresTicket.size() - 1) + " - afegit al ticket");
+
+                } else {
+                    System.out.println("Index introduït incorrecte");
+                }
+
+            }
+
+        }
+
+        while (true) {
+
+            System.out.println("FLORS:");
+
+            for (int i = 0; i < flors.size(); i++) {
+                System.out.println(i + " - " + flors.get(i));
+            }
+
+            opcio = lector.nextLine();
+
+            if (opcio.equals("skip")) {
+
+                break;
+
+            } else {
+
+                if (Integer.parseInt(opcio) >= 0 && Integer.parseInt(opcio) < flors.size()) {
+
+                    // Añadimos la flor que queremos poner en el ticket al arraylist
+                    florsTicket.add(flors.remove(Integer.parseInt(opcio)));
+
+                    // Guardamos la ganancia para otro método
+                    dinersGuanyats = dinersGuanyats + florsTicket.get(florsTicket.size() - 1).getPreu();
+
+                    System.out.println(florsTicket.get(florsTicket.size() - 1) + " - afegit al ticket");
+
+                } else {
+                    System.out.println("Index introduït incorrecte");
+                }
+
+            }
+
+        }
+
+        while (true) {
+
+            System.out.println("DECORACIÓ:");
+
+            for (int i = 0; i < decoracions.size(); i++) {
+                System.out.println(i + " - " + decoracions.get(i));
+            }
+
+            opcio = lector.nextLine();
+
+            if (opcio.equals("skip")) {
+
+                break;
+
+            } else {
+
+                if (Integer.parseInt(opcio) >= 0 && Integer.parseInt(opcio) < decoracions.size()) {
+
+                    // Añadimos el arbol que queremos poner en el ticket al arraylist
+                    decoracionsTicket.add(decoracions.remove(Integer.parseInt(opcio)));
+
+                    // Guardamos la ganancia para otro método
+                    dinersGuanyats = dinersGuanyats + decoracionsTicket.get(decoracionsTicket.size() - 1).getPreu();
+
+                    System.out.println(decoracionsTicket.get(decoracionsTicket.size() - 1) + " - afegit al ticket");
+
+                } else {
+                    System.out.println("Index introduït incorrecte");
+                }
+
+            }
+
+        }
+
+        return new Ticket(arbresTicket, florsTicket, decoracionsTicket);
 
     }
 
