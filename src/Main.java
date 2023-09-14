@@ -250,9 +250,13 @@ public class Main {
 
                     break;
 
+                    // Printar per pantalla valor total de la floristeria
                 case "10":
 
+                    printarValorTotalFloristeria();
+
                     break;
+
                 case "11":
 
                     break;
@@ -269,6 +273,21 @@ public class Main {
                     System.out.println("introdueix una opció correcte!");
             }
         }
+
+    }
+
+    // Método para sumar el valor total de la floristeria usando stream
+    private static void printarValorTotalFloristeria() {
+
+        double valorTotal = 0;
+
+        valorTotal = arbres.stream().mapToDouble(Arbre::getPreu).sum();
+
+        valorTotal = valorTotal + flors.stream().mapToDouble(Flor::getPreu).sum();
+
+        valorTotal = valorTotal + decoracions.stream().mapToDouble(Decoracio::getPreu).sum();
+
+        System.out.println("Valor total de la floristeria: " + valorTotal);
 
     }
 
